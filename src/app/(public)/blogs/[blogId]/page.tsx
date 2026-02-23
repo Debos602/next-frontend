@@ -1,5 +1,6 @@
 // File: src/app/(public)/blogs/[blogId]/page.tsx
 import BlogDetailsCard from "@/components/modules/Blogs/BlogDetailsCard";
+import { getBlogById } from "@/services/PostServices";
 import { Blog } from "@/types";
 
 interface PageProps {
@@ -34,8 +35,7 @@ export const generateStaticParams = async () => {
 
 export const generateMetadata = async ({ params }: { params: Promise<{ blogId: string; }>; }) => {
     const { blogId } = await params;
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/post/${blogId}`);
-    const blog: Blog = await res.json();
+    const blog = await getBlogById(blogId);
     return {
         title: blog?.title,
         description: blog?.content
@@ -48,17 +48,7 @@ export default async function BlogDetailsPage({ params }: PageProps) {
     const { blogId } = await params;
 
     // Fetch blog from API
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/post/${blogId}`);
-
-    if (res.status === 404) {
-        return <div className="text-center py-10">Blog not found 😢</div>;
-    }
-
-    if (!res.ok) {
-        throw new Error("Failed to fetch blog");
-    }
-
-    const blog: Blog = await res.json();
+    const blog = await getBlogById(blogId);
 
     return (
         <div className="py-30 px-4 max-w-7xl mx-auto">
