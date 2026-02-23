@@ -1,14 +1,6 @@
 // File: src/app/(public)/blogs/[blogId]/page.tsx
 import BlogDetailsCard from "@/components/modules/Blogs/BlogDetailsCard";
-
-interface Blog {
-    id: number;
-    title: string;
-    content: string;
-    author: string;
-    createdAt: string;
-    [key: string]: any; // extra fields
-}
+import { Blog } from "@/types";
 
 interface PageProps {
     params: { blogId: string; };
@@ -31,13 +23,32 @@ export const error = ({ error, reset }: { error: Error; reset: () => void; }) =>
     );
 };
 
+export const generateStaticParams = async () => {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/post`);
+    const { data: blogs } = await res.json();
+    return blogs.slice(0, 2).map((blog: Blog) => ({
+        blogId: String(blog.id),
+    }));
+};
+
+
+export const generateMetadata = async ({ params }: { params: Promise<{ blogId: string; }>; }) => {
+    const { blogId } = await params;
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/post/${blogId}`);
+    const blog: Blog = await res.json();
+    return {
+        title: blog?.title,
+        description: blog?.content
+    };
+};
+
+
+
 export default async function BlogDetailsPage({ params }: PageProps) {
     const { blogId } = await params;
 
     // Fetch blog from API
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/post/${blogId}`, {
-        cache: "no-store", // always fetch fresh
-    });
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/post/${blogId}`);
 
     if (res.status === 404) {
         return <div className="text-center py-10">Blog not found 😢</div>;

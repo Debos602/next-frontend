@@ -33,3 +33,12 @@ export interface Post {
     updatedAt: string;   // চাইলে Date ব্যবহার করতে পারো
     author: User;
 }
+
+export interface Blog {
+    id: number;
+    title: string;
+    content: string;
+    author: string;
+    createdAt: string;
+
+}
