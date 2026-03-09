@@ -12,7 +12,7 @@ const AllBlogsPage = async () => {
     cache: "no-store"
   });
   const { data: blogs } = await res.json();
-  console.log(blogs);
+  // console.log(blogs);
   return (
     <div className="py-30 px-4 max-w-7xl mx-auto my-5">
       <h2 className="text-center text-4xl">All Blogs</h2>

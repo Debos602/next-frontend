@@ -17,11 +17,6 @@ import Image from "next/image";
 import { signIn } from "next-auth/react";
 
 
-// type LoginFormValues = {
-//   email: string;
-//   password: string;
-// };
-
 export default function LoginForm() {
     const form = useForm<FieldValues>({
         defaultValues: {
