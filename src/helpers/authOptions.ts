@@ -1,4 +1,6 @@
+import { sign } from "crypto";
 import GoogleProvider from "next-auth/providers/google";
+import { signIn } from "next-auth/react";
 
 export const authOptions = {
     // Configure one or more authentication providers
@@ -9,6 +11,9 @@ export const authOptions = {
         })
     ],
     secret: process.env.NEXT_AUTH_SECRET,
+    pages: {
+        signIn: "/login"
+    }
 
 };
 
