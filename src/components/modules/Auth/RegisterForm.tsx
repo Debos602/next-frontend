@@ -13,16 +13,11 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form";
-// import { register } from "@/actions/auth";
 import { toast } from "sonner";
+import { register } from "@/actions/auth";
 import { useRouter } from "next/navigation";
 
-// type RegisterFormValues = {
-//   name: string;
-//   email: string;
-//   phone: string;
-//   password: string;
-// };
+
 
 export default function RegisterForm() {
     const form = useForm<FieldValues>({
@@ -33,16 +28,20 @@ export default function RegisterForm() {
             password: "",
         },
     });
+
     const router = useRouter();
+
     const onSubmit = async (values: FieldValues) => {
+        console.log(values);
         try {
-            // const res = await register(values);
-            // if (res?.id) {
-            //     toast.success("User Registered Successfully");
-            //     router.push("/login");
-            // }
+            const res = await register(values);
+            if (res?.id) {
+                toast.success("User Registered Successfully");
+                router.push("/login");
+            }
         } catch (err) {
             console.error(err);
+            toast.error("Failed to register user");
         }
     };
 

@@ -1,9 +1,13 @@
 "use server";
 
+import { getUserSession } from "@/helpers/getUserSession";
 import { revalidatePath, revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 
 export const create = async (data: FormData) => {
+
+    const session = await getUserSession();
+
     // console.log("create-action", data);
     const blogInfo = Object.fromEntries(data.entries());  //its converts as plain object
     const modifiedData = {
@@ -12,7 +16,7 @@ export const create = async (data: FormData) => {
             .toString()
             .split(",")
             .map((tag) => tag.trim()),
-        authorId: 4,
+        authorId: session?.user?.id,
         isFeatured: Boolean(blogInfo.isFeatured),
     };
 

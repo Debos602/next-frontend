@@ -15,6 +15,9 @@ import {
 } from "@/components/ui/form";
 import Image from "next/image";
 import { signIn } from "next-auth/react";
+// import { login } from "@/actions/auth";
+// import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 
 export default function LoginForm() {
@@ -25,26 +28,29 @@ export default function LoginForm() {
         },
     });
 
+    const router = useRouter();
+
     const onSubmit = async (values: FieldValues) => {
+        // console.log(values);
         try {
             // const res = await login(values);
             // if (res?.id) {
-            //   toast.success("User Logged in Successfully");
+            //     toast.success("User Logged in Successfully");
             // } else {
-            //   toast.error("User Login Failed");
+            //     toast.error("User Login Failed");
             // }
-            // signIn("credentials", {
-            //     ...values,
-            //     callbackUrl: "/dashboard",
-            // });
+            // router.push("/dashboard");
+            signIn("credentials", {
+                ...values,
+                callbackUrl: "/dashboard",
+            });
         } catch (err) {
             console.error(err);
         }
     };
 
     const handleSocialLogin = (provider: "google" | "github") => {
-        console.log(`Login with ${provider}`);
-        signIn();
+        signIn(provider, { callbackUrl: "/dashboard" });
     };
 
     return (
